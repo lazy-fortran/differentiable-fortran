@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -272,8 +271,7 @@ def main():
     interface(timings)
     accuracy()
     toolchains()
-    manifest = json.loads((RESULTS / "manifest.json").read_text())
-    print(f"Rendered reference figures for {manifest['hostname']}")
+    print("Rendered reference figures")
 
 
 if __name__ == "__main__":
