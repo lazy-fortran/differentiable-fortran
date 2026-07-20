@@ -1,0 +1,16 @@
+name = "differentiable-fortran"
+version = "0.1.0"
+description = "Comparable automatic-differentiation and Python-interface patterns for Fortran"
+author = "lazy-fortran contributors"
+maintainer = "lazy-fortran contributors"
+license = "Apache-2.0"
+copyright = "Copyright 2026, lazy-fortran contributors"
+
+[build]
+auto-executables = false
+auto-examples = false
+auto-tests = true
+
+[fortran]
+implicit-typing = false
+source-form = "free"

@@ -1,0 +1,6 @@
+Differentiable Fortran
+Copyright 2026 lazy-fortran contributors
+
+The Tesseract packaging example was adapted from the Apache-2.0-licensed
+`fortran_enzyme` example in pasteurlabs/tesseract-core.
+Copyright 2025 Pasteur Labs.

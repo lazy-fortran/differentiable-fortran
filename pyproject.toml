@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "differentiable-fortran"
+version = "0.1.0"
+description = "Comparable automatic-differentiation and Python-interface patterns for Fortran"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+dependencies = ["numpy>=2.0"]
+
+[project.optional-dependencies]
+benchmark = [
+    "autograd>=1.8",
+    "matplotlib>=3.9",
+    "pandas>=2.2",
+    "pyperf>=2.7",
+]
+test = ["pytest>=8"]
+jax = ["jax>=0.5"]
+torch = ["torch>=2.6"]
+tesseract = ["tesseract-core[runtime]>=1.10"]
+wrappers = [
+    "cython>=3.0",
+    "f90wrap>=0.2.16",
+    "scipy>=1.14",
+    "setuptools>=77",
+]
+all = [
+    "autograd>=1.8",
+    "cython>=3.0",
+    "f90wrap>=0.2.16",
+    "jax>=0.5",
+    "matplotlib>=3.9",
+    "pandas>=2.2",
+    "pyperf>=2.7",
+    "pytest>=8",
+    "scipy>=1.14",
+    "setuptools>=77",
+    "torch>=2.6",
+    "tesseract-core[runtime]>=1.10",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["test/python"]
+
+[tool.setuptools.packages.find]
+where = ["python"]

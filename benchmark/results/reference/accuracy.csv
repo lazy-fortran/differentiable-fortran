@@ -1,0 +1,14 @@
+implementation,operation,relative_l2_error
+Fortran analytical,jvp,6.8723351144095151e-17
+Fortran analytical,vjp,2.8346503399046555e-18
+Flang + Enzyme,jvp,7.5346811764666242e-17
+Flang + Enzyme,vjp,9.3541803400350181e-17
+LFortran + Enzyme,jvp,6.8372972389399479e-17
+LFortran + Enzyme,vjp,6.893133897803655e-17
+Python/NumPy Autograd (eager),jvp,2.454918105149736e-18
+Python/NumPy Autograd (eager),vjp,1.6267552381558119e-16
+JAX native (jit),jvp,2.454918105149736e-18
+JAX native (jit),vjp,1.6270514019736237e-16
+PyTorch native (compile),jvp,2.454918105149736e-18
+PyTorch native (compile),vjp,1.6268831252188019e-16
+Centered finite difference,jvp,4.646223641826226e-10

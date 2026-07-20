@@ -1,0 +1,26 @@
+{
+  "generated_at": "2026-07-15T17:01:14+0200",
+  "platform": "Linux",
+  "processor": "AMD Ryzen 9 5950X 16-Core Processor",
+  "logical_cpus": 32,
+  "python": "3.13.13",
+  "jax": "0.10.2",
+  "jax_backend": "cpu",
+  "numpy": "2.4.6",
+  "enzyme_benchmarks_commit": "9fa1579296b28d9642f8b69a6fffb753211c3f88",
+  "versions": [
+    "clang version 22.1.6",
+    "flang version 22.1.6",
+    "LFortran version: 0.58.0-4615-g2d1afed24",
+    "LLVM version 22.1.6",
+    "Enzyme plugin SHA-256 bd82cd7d03c7d339a736777609d99c2d2cd47519fa9da1827b193028ef274854"
+  ],
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "XLA_FLAGS": "--xla_cpu_multi_thread_eigen=false",
+    "JAX_PLATFORMS": null
+  },
+  "git_commit": "ccf1efb96d15d148317ab1f7392d433396820f09",
+  "samples": 9,
+  "statistic": "median with q25-q75 plotted"
+}

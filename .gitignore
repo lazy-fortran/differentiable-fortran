@@ -1,0 +1,13 @@
+.cache/
+.venv/
+__pycache__/
+*.egg-info/
+*.mod
+*.o
+*.so
+build/
+build-*/
+dist/
+benchmark/results/local/
+solutions/cython/heat_step.c
+solutions/numpy-ufunc/heat_ufunc.c

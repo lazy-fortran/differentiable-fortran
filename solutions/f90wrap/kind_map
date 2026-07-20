@@ -1,0 +1,4 @@
+{
+    "integer": {"c_int": "int"},
+    "real": {"c_double": "double", "dp": "double"},
+}

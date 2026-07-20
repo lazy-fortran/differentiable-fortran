@@ -1,0 +1,74 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  core:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: Install compilers
+        run: sudo apt-get update && sudo apt-get install -y gfortran ninja-build
+      - name: Install Python dependencies
+        run: uv sync --extra test --extra benchmark --extra wrappers --extra jax
+      - name: Build and test Fortran
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+          cmake --build build
+          ctest --test-dir build --output-on-failure
+      - name: Test Python reference and ISO C interface
+        run: uv run pytest -q
+      - name: Test generated Python interfaces
+        run: |
+          solutions/f90wrap/build.sh
+          solutions/cython/build.sh
+          solutions/numpy-ufunc/build.sh
+      - name: Re-render committed benchmark figures
+        run: |
+          uv run benchmark/plot.py
+          git diff --exit-code -- 'benchmark/figures/*.svg'
+          uv run studies/enzyme-readme/plot.py
+          git diff --exit-code -- 'studies/enzyme-readme/figures/*.svg'
+
+  enzyme-toolchains:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-name: toolchain
+          create-args: >-
+            lfortran=0.61.0
+            -c conda-forge
+      - name: Install LLVM 19 and Flang
+        run: |
+          wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key \
+            | sudo gpg --dearmor -o /etc/apt/keyrings/llvm.gpg
+          echo "deb [signed-by=/etc/apt/keyrings/llvm.gpg] http://apt.llvm.org/noble/ llvm-toolchain-noble-19 main" \
+            | sudo tee /etc/apt/sources.list.d/llvm.list
+          sudo apt-get update
+          sudo apt-get install -y clang-19 flang-19 llvm-19 gfortran ninja-build
+          wget -q https://github.com/EnzymeAD/Enzyme/releases/download/nightly/LLVMEnzyme-19.so \
+            -O "$RUNNER_TEMP/LLVMEnzyme-19.so"
+      - name: Build analytical oracle
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+          cmake --build build
+      - name: Test Flang and LFortran Enzyme pipelines
+        env:
+          CLANG: clang-19
+          ENZYME_PLUGIN: ${{ runner.temp }}/LLVMEnzyme-19.so
+          FLANG: flang-new-19
+          LLVM_LINK: llvm-link-19
+          OPT: opt-19
+        run: |
+          toolchains/flang-enzyme/build.sh
+          export LFORTRAN="$MAMBA_ROOT_PREFIX/envs/toolchain/bin/lfortran"
+          toolchains/lfortran-enzyme/build.sh
+          studies/enzyme-readme/build.sh

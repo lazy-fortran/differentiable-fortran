@@ -1,0 +1,36 @@
+{
+  "collected_at": "2026-07-15T15:51:31+0200",
+  "platform": "Linux",
+  "processor": "AMD Ryzen 9 5950X 16-Core Processor",
+  "python": "3.13.13",
+  "numpy": "2.4.6",
+  "autograd": "1.9.1",
+  "jax": "0.10.2",
+  "torch": "2.13.0+cu130",
+  "flang": "flang version 22.1.6",
+  "lfortran": "LFortran version: 0.58.0-4615-g2d1afed24",
+  "opt": "LLVM (http://llvm.org/):",
+  "enzyme_plugin": "LLVMEnzyme-22.so",
+  "sizes": [
+    16,
+    64,
+    256,
+    1024,
+    4096,
+    16384,
+    65536
+  ],
+  "repeats": 9,
+  "startup_repeats": 1,
+  "target_sample_seconds": 0.004,
+  "jax_device": "cpu:0",
+  "jax_compilation_cache_dir": null,
+  "torch_device": "cpu",
+  "torch_compile": {
+    "backend": "inductor",
+    "dynamic": false,
+    "fullgraph": true
+  },
+  "torch_threads": 1,
+  "torch_interop_threads": 1
+}
