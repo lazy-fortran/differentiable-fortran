@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -12,6 +13,7 @@ import pandas as pd
 
 STUDY = Path(__file__).resolve().parent
 plt.rcParams["svg.hashsalt"] = "differentiable-fortran-enzyme-readme"
+SVG_HASH_ID = re.compile(r"(?<![A-Za-z0-9_])([mp][0-9a-f]{10})(?![A-Za-z0-9_])")
 COLORS = {
     "C++ Enzyme": "#3b5b92",
     "Flang Enzyme": "#d65f5f",
@@ -28,6 +30,21 @@ ORDER = list(COLORS)
 WORKLOADS = ["LSTM", "BA", "GMM", "Euler", "RK4", "FFT", "Bruss"]
 
 
+def canonicalize_svg_ids(svg: Path) -> None:
+    text = svg.read_text()
+    ids = dict.fromkeys(re.findall(r'id="([mp][0-9a-f]{10})"', text))
+    counters = {"m": 0, "p": 0}
+    replacements = {}
+    for identifier in ids:
+        prefix = identifier[0]
+        counters[prefix] += 1
+        replacements[identifier] = f"{prefix}{counters[prefix]:010d}"
+    text = SVG_HASH_ID.sub(
+        lambda match: replacements.get(match.group(1), match.group(1)), text
+    )
+    svg.write_text("\n".join(line.rstrip() for line in text.splitlines()) + "\n")
+
+
 def save(figure: plt.Figure, output: Path, name: str) -> None:
     figure.savefig(
         output / f"{name}.svg",
@@ -35,9 +52,7 @@ def save(figure: plt.Figure, output: Path, name: str) -> None:
         metadata={"Date": "2026-07-15"},
     )
     svg = output / f"{name}.svg"
-    svg.write_text(
-        "\n".join(line.rstrip() for line in svg.read_text().splitlines()) + "\n"
-    )
+    canonicalize_svg_ids(svg)
     figure.savefig(output / f"{name}.png", bbox_inches="tight", dpi=180)
     plt.close(figure)
 
