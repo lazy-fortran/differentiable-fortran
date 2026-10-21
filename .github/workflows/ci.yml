@@ -4,7 +4,8 @@ on:
   merge_group:
     types: [checks_requested]
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
 
 jobs:
@@ -38,6 +39,8 @@ jobs:
           uv run studies/enzyme-readme/plot.py
           git diff --exit-code -- 'studies/enzyme-readme/figures/*.svg'
 
+    if: >-
+      github.event_name == 'merge_group' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && github.actor != 'github-merge-queue[bot]') || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'full-ci'))
   enzyme-toolchains:
     runs-on: ubuntu-24.04
     steps:
@@ -74,3 +77,8 @@ jobs:
           export LFORTRAN="$MAMBA_ROOT_PREFIX/envs/toolchain/bin/lfortran"
           toolchains/lfortran-enzyme/build.sh
           studies/enzyme-readme/build.sh
+    if: >-
+      github.event_name == 'merge_group' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && github.actor != 'github-merge-queue[bot]') || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'full-ci'))
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || format('{0}-{1}', github.ref, github.run_id) }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
